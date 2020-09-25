@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/react-ts-quiz/static/js/main.d6b5b286.chunk.js",
+    "main.js.map": "/react-ts-quiz/static/js/main.d6b5b286.chunk.js.map",
+    "runtime-main.js": "/react-ts-quiz/static/js/runtime-main.f8725bbe.js",
+    "runtime-main.js.map": "/react-ts-quiz/static/js/runtime-main.f8725bbe.js.map",
+    "static/js/2.5a59cedb.chunk.js": "/react-ts-quiz/static/js/2.5a59cedb.chunk.js",
+    "static/js/2.5a59cedb.chunk.js.map": "/react-ts-quiz/static/js/2.5a59cedb.chunk.js.map",
+    "index.html": "/react-ts-quiz/index.html",
+    "precache-manifest.8cd4a865b930cf3286403bfe4dafecee.js": "/react-ts-quiz/precache-manifest.8cd4a865b930cf3286403bfe4dafecee.js",
+    "service-worker.js": "/react-ts-quiz/service-worker.js",
+    "static/js/2.5a59cedb.chunk.js.LICENSE.txt": "/react-ts-quiz/static/js/2.5a59cedb.chunk.js.LICENSE.txt",
+    "static/media/koes-nadi.jpg": "/react-ts-quiz/static/media/koes-nadi.9d2a7e67.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f8725bbe.js",
+    "static/js/2.5a59cedb.chunk.js",
+    "static/js/main.d6b5b286.chunk.js"
+  ]
+}
