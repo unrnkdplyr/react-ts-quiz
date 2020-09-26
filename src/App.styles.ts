@@ -26,7 +26,7 @@ export const Wrapper = styled.div`
   > p {
     color: #fff;
   }
-  .score {
+  .score, .category {
     color: #fff;
     font-size: 2rem;
     margin: 0;

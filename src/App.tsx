@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { QuestionCard } from "./components/QuestionCard"
-import { Difficulty, QuestionState, fetchQuizQuestions } from "./Api"
+import { Category, QuestionState, fetchQuizCategories, fetchQuizQuestions } from "./Api"
 import { GlobalStyle, Wrapper } from "./App.styles"
+import { CategoryCard } from "./components/CategoryCard"
 
 export type Answer = {
   answer:        string
@@ -10,31 +11,51 @@ export type Answer = {
   question:      string
 }
 
-const TOTAL_QUESTIONS = 10
-
 const App = () => {
   const [isGameOver, setIsGameOver] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const [amount, setAmount] = useState(10)
+  const [category, setCategory] = useState(0)
+  const [categoryList, setCategoryList] = useState<Category[]>([])
+  const [difficulty, setDifficulty] = useState("easy")
   const [number, setNumber] = useState(0)
   const [questions, setQuestions] = useState<QuestionState[]>([])
   const [score, setScore] = useState(0)
   const [userAnswers, setUserAnswers] = useState<Answer[]>([])
 
+  useEffect(() => {
+    getCategories()
+  }, [])
+
+  const getCategories = async () => {
+    const categories = await fetchQuizCategories()
+
+    setCategoryList(categories)
+  }
 
   const startTrivia = async () => {
-    setIsLoading(true)
-    setIsGameOver(false)
+    if (!number) {
+      setIsLoading(true)
+      setIsGameOver(false)
 
-    const newQuestions = await fetchQuizQuestions(
-      TOTAL_QUESTIONS,
-      Difficulty.EASY
-    )
+      const newQuestions = await fetchQuizQuestions({
+        amount,
+        category,
+        difficulty
+      })
 
-    setQuestions(newQuestions)
-    setNumber(0)
-    setScore(0)
-    setUserAnswers([])
-    setIsLoading(false)
+      setQuestions(newQuestions)
+      setScore(0)
+      setUserAnswers([])
+      setIsLoading(false)
+    } else {
+      setIsGameOver(true)
+      setAmount(10)
+      setCategory(0)
+      setDifficulty("easy")
+      setNumber(0)
+      setScore(0)
+    }
   }
 
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -54,36 +75,37 @@ const App = () => {
     }
   }
 
-  const nextQuestion = () => {
-    const question = number + 1
-    if (question === TOTAL_QUESTIONS) {
-      setIsGameOver(true)
-    } else {
-      setNumber(question)
-    }
-  }
+  const nextQuestion = () => setNumber(number + 1)
 
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        <h1>REACT QUIZ</h1>
-        {(isGameOver || userAnswers.length === TOTAL_QUESTIONS) && (
-          <button className="start" onClick={startTrivia}>Start</button>
+        <h1>TRIVIA QUIZ</h1>
+        {(isGameOver || userAnswers.length === amount) && (
+          <button className="start" onClick={startTrivia}>{!number ? "Start" : "New Game"}</button>
         )}
         {!isGameOver && <p className="score">Score: {score}</p>}
+        {!isGameOver && !isLoading && <p className="category">Category: {questions[number].category}</p>}
         {isLoading && <p>Loading Questions ...</p>}
-        {!isLoading && !isGameOver && (
+        {isGameOver ? (
+          <CategoryCard
+            list={categoryList}
+            amountOnChange={e => setAmount(parseInt(e.target.value))}
+            categoryOnChange={e => setCategory(parseInt(e.target.value))}
+            difficultyOnChange={e => setDifficulty(e.target.value)}
+          />
+        ) : !isLoading && (
           <QuestionCard
             callback={checkAnswer}
             choices={questions[number].answer}
             question={questions[number].question}
             questionNo={number + 1}
-            totalQuestions={TOTAL_QUESTIONS}
+            totalQuestions={amount}
             userAnswer={userAnswers ? userAnswers[number] : undefined}
           />
         )}
-        {!isGameOver && !isLoading && (userAnswers.length === number + 1) && (number !== TOTAL_QUESTIONS - 1) && (
+        {!isGameOver && !isLoading && (userAnswers.length === number + 1) && (number !== amount - 1) && (
           <button className="next" onClick={nextQuestion}>Next</button>
         )}
       </Wrapper>
