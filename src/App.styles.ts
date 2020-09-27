@@ -19,6 +19,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 `
 
+type WrapperProps = {
+  isDisabled: boolean
+}
+
 export const Wrapper = styled.div`
   align-items: center;
   display: flex;
@@ -46,9 +50,6 @@ export const Wrapper = styled.div`
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  .start {
-    max-width: 200px;
-  }
   .start, .next {
     background: linear-gradient(180deg, #fff, #ffcc91);
     border: 2px solid #d38558;
@@ -58,5 +59,13 @@ export const Wrapper = styled.div`
     height: 40px;
     margin: 20px 0;
     padding: 0 40px;
+  }
+  .start {
+    background: ${({ isDisabled }: WrapperProps) =>
+      isDisabled && "linear-gradient(180deg, #fff, rgba(255, 204, 145, 0.75))"};
+    border-color: ${({ isDisabled }: WrapperProps) =>
+      isDisabled && "rgba(211, 133, 88, 0.75)"};
+    cursor: ${({ isDisabled }: WrapperProps) =>
+      isDisabled && "default"};
   }
 `
