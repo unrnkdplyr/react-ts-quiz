@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.js": "/react-ts-quiz/static/js/main.ca741d14.chunk.js",
-    "main.js.map": "/react-ts-quiz/static/js/main.ca741d14.chunk.js.map",
+    "main.js": "/react-ts-quiz/static/js/main.8563bbc2.chunk.js",
+    "main.js.map": "/react-ts-quiz/static/js/main.8563bbc2.chunk.js.map",
     "runtime-main.js": "/react-ts-quiz/static/js/runtime-main.f8725bbe.js",
     "runtime-main.js.map": "/react-ts-quiz/static/js/runtime-main.f8725bbe.js.map",
-    "static/js/2.5f869dd1.chunk.js": "/react-ts-quiz/static/js/2.5f869dd1.chunk.js",
-    "static/js/2.5f869dd1.chunk.js.map": "/react-ts-quiz/static/js/2.5f869dd1.chunk.js.map",
+    "static/js/2.9bbcbfb2.chunk.js": "/react-ts-quiz/static/js/2.9bbcbfb2.chunk.js",
+    "static/js/2.9bbcbfb2.chunk.js.map": "/react-ts-quiz/static/js/2.9bbcbfb2.chunk.js.map",
     "index.html": "/react-ts-quiz/index.html",
-    "precache-manifest.6479dfe3549b60088637213f890829c0.js": "/react-ts-quiz/precache-manifest.6479dfe3549b60088637213f890829c0.js",
+    "precache-manifest.bf47a59aa07339c6f1360d7cfc00d804.js": "/react-ts-quiz/precache-manifest.bf47a59aa07339c6f1360d7cfc00d804.js",
     "service-worker.js": "/react-ts-quiz/service-worker.js",
-    "static/js/2.5f869dd1.chunk.js.LICENSE.txt": "/react-ts-quiz/static/js/2.5f869dd1.chunk.js.LICENSE.txt",
+    "static/js/2.9bbcbfb2.chunk.js.LICENSE.txt": "/react-ts-quiz/static/js/2.9bbcbfb2.chunk.js.LICENSE.txt",
     "static/media/koes-nadi.jpg": "/react-ts-quiz/static/media/koes-nadi.9d2a7e67.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.f8725bbe.js",
-    "static/js/2.5f869dd1.chunk.js",
-    "static/js/main.ca741d14.chunk.js"
+    "static/js/2.9bbcbfb2.chunk.js",
+    "static/js/main.8563bbc2.chunk.js"
   ]
 }
