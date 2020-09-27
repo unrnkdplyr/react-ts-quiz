@@ -5,6 +5,7 @@ import { ButtonWrapper, Wrapper } from "./QuestionCard.styles"
 type Props = {
   callback:       (e: React.MouseEvent<HTMLButtonElement>) => void
   choices:        string[]
+  isTimeout:      boolean
   question:       string
   questionNo:     number
   totalQuestions: number
@@ -14,6 +15,7 @@ type Props = {
 export const QuestionCard: React.FC<Props> = ({
   callback,
   choices,
+  isTimeout,
   question,
   questionNo,
   totalQuestions,
@@ -30,7 +32,7 @@ export const QuestionCard: React.FC<Props> = ({
           isCorrect={userAnswer?.correctAnswer === choice}
           key={choice}
           isClicked={userAnswer?.answer === choice} >
-            <button disabled={!!userAnswer} onClick={callback} value={choice}>
+            <button disabled={isTimeout} onClick={callback} value={choice}>
               <span dangerouslySetInnerHTML={{ __html: choice }} />
             </button>
         </ButtonWrapper>

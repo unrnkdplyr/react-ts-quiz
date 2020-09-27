@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from "react"
+import { CategoryCard } from "./components/CategoryCard"
 import { QuestionCard } from "./components/QuestionCard"
 import {
   Category, QuestionState,
   fetchQuizCategories, fetchQuizCount, fetchQuizQuestions
 } from "./Api"
 import { GlobalStyle, Wrapper } from "./App.styles"
-import { CategoryCard } from "./components/CategoryCard"
+import { minutesOfTime, secondsOfTime } from "./utils"
+
+let TIMER: number = 0
+
+const COUNTDOWN: { [x: string]: number } = {
+  easy:   15,
+  medium: 20,
+  hard:   25
+}
 
 const DEFAULT = {
   AMOUNT:       5,
   AMOUNT_LIST:  [5, 10, 15, 20],
+  COUNTDOWN:    0,
   NUMBER:       0,
   SCORE:        0,
   USER_ANSWERS: []
@@ -26,10 +36,12 @@ const App = () => {
   const [isGameOver, setIsGameOver] = useState(true)
   const [isLoadingCount, setIsLoadingCount] = useState(false)
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false)
+  const [isTimeout, setIsTimeout] = useState(true)
   const [amount, setAmount] = useState(DEFAULT.AMOUNT)
   const [amountList, setAmountList] = useState(DEFAULT.AMOUNT_LIST)
   const [category, setCategory] = useState(0)
   const [categoryList, setCategoryList] = useState<Category[]>([])
+  const [countdown, setCountdown] = useState(DEFAULT.COUNTDOWN)
   const [difficulty, setDifficulty] = useState("easy")
   const [number, setNumber] = useState(DEFAULT.NUMBER)
   const [questions, setQuestions] = useState<QuestionState[]>([])
@@ -79,6 +91,7 @@ const App = () => {
     if (!number) {
       setIsLoadingQuestions(true)
       setIsGameOver(false)
+      setIsTimeout(false)
 
       const newQuestions = await fetchQuizQuestions({
         amount,
@@ -86,22 +99,33 @@ const App = () => {
         difficulty
       })
 
+      setCountdown(COUNTDOWN[difficulty])
       setQuestions(newQuestions)
-      setScore(DEFAULT.SCORE)
       setUserAnswers(DEFAULT.USER_ANSWERS)
       setIsLoadingQuestions(false)
     } else {
       setIsGameOver(true)
       setNumber(DEFAULT.NUMBER)
-      setScore(DEFAULT.SCORE)
     }
+
+    setScore(DEFAULT.SCORE)
   }
 
-  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const checkAnswer = (e?: React.MouseEvent<HTMLButtonElement>) => {
     if (!isGameOver) {
-      const answer = e.currentTarget.value
-      const isCorrect = questions[number].correct_answer === answer
-      if (isCorrect) setScore(prev => prev + 1)
+      setIsTimeout(true)
+      if (countdown) {
+        setCountdown(DEFAULT.COUNTDOWN)
+        clearTimeout(TIMER)
+      }
+
+      let answer = ""
+      let isCorrect = false
+      if (e) {
+        answer = e.currentTarget.value
+        isCorrect = questions[number].correct_answer === answer
+        if (isCorrect) setScore(prev => prev + 1)
+      }
 
       const answerObject = {
         answer,
@@ -114,13 +138,36 @@ const App = () => {
     }
   }
 
-  const nextQuestion = () => setNumber(number + 1)
+  const nextQuestion = () => {
+    setIsTimeout(false)
+    setCountdown(COUNTDOWN[difficulty])
+    setNumber(number + 1)
+  }
+
+  const Countdown = () => {
+    const minutes = minutesOfTime(countdown)
+    const seconds = secondsOfTime(countdown) + 1
+
+    TIMER = setTimeout(() => {
+      if (countdown === 1) checkAnswer()
+
+      setCountdown(countdown - 1)
+    }, 1000)
+
+
+    return (
+      <h1>
+        {`${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}
+      </h1>
+    )
+  }
 
   return (
     <>
       <GlobalStyle />
       <Wrapper isDisabled={isLoadingCount}>
         <h1>TRIVIA QUIZ</h1>
+        {(countdown > 0) && <Countdown />}
         {(isGameOver || userAnswers.length === amount) && (
           <button
             className="start"
@@ -148,6 +195,7 @@ const App = () => {
           <QuestionCard
             callback={checkAnswer}
             choices={questions[number].answer}
+            isTimeout={isTimeout}
             question={questions[number].question}
             questionNo={number + 1}
             totalQuestions={amount}
